@@ -1,0 +1,2 @@
+- [Drizzle-Zod boolean null](drizzle-zod-boolean-null.md) — createInsertSchema generates boolean|null|undefined; Drizzle insert rejects null; fix: strip nulls + cast as any
+- [Design subagent task file](design-subagent-task-file.md) — write large task strings to a file first; code_execution backtick conflicts cause "Unexpected token" errors
