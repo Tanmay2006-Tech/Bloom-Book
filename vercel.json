@@ -1,6 +1,17 @@
 {
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "corepack enable pnpm && pnpm install && pnpm --filter @workspace/bloombook run build",
+  "devCommand": "corepack enable pnpm && pnpm install && pnpm --filter @workspace/bloombook run dev",
+  "installCommand": "corepack enable pnpm && pnpm install --frozen-lockfile",
+  "framework": null,
+  "outputDirectory": "artifacts/bloombook/dist",
+  "nodeVersion": "20.x",
+  "regions": ["iad1"],
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "codebase-audit-and-productionize": true
+    }
+  },
   "env": {
     "PORT": {
       "description": "Server port for development",
@@ -15,10 +26,9 @@
     },
     "VITE_CLOUDINARY_UPLOAD_PRESET": {
       "description": "Cloudinary upload preset"
+    },
+    "VITE_API_URL": {
+      "description": "API server endpoint for production"
     }
-  },
-  "framework": null,
-  "outputDirectory": "artifacts/bloombook/dist",
-  "nodeVersion": "20.x",
-  "regions": ["iad1"]
+  }
 }
