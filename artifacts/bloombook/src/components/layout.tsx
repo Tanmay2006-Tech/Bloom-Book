@@ -24,7 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="flex flex-col min-h-[100dvh] w-full max-w-[480px] mx-auto bg-bloom-cream relative overflow-hidden shadow-2xl pb-[88px]">
+    <div className="flex flex-col min-h-[100dvh] w-full max-w-[480px] mx-auto bg-bloom-cream relative overflow-hidden pb-[88px]" style={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right)' }}>
       <main className="flex-1 w-full overflow-y-auto overflow-x-hidden">
         {children}
       </main>
@@ -35,11 +35,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
       */}
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 w-full max-w-[480px] h-[64px] pb-safe flex items-center justify-around px-2 backdrop-blur-[20px] bg-[rgba(255,248,240,0.85)] border-t border-[rgba(242,196,206,0.3)] z-40">
+      <div className="fixed bottom-0 left-0 right-0 w-full max-w-[480px] h-[64px] flex items-center justify-around px-2 backdrop-blur-[20px] bg-[rgba(255,248,240,0.85)] border-t border-[rgba(242,196,206,0.3)] z-40 mx-auto" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
         {navItems.map((item) => {
           const isActive = location === item.path;
           return (
-            <Link key={item.name} href={item.path} className="flex flex-col items-center justify-center w-16 h-full gap-1 active:scale-95 transition-transform" data-testid={`nav-${item.name.toLowerCase()}`}>
+            <Link 
+              key={item.name} 
+              href={item.path} 
+              className="flex flex-col items-center justify-center w-16 h-full gap-1 active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-bloom-pink-deep focus:ring-offset-2 rounded-lg" 
+              data-testid={`nav-${item.name.toLowerCase()}`}
+              aria-current={isActive ? "page" : undefined}
+              aria-label={`${item.name}${isActive ? " (current)": ""}`}
+            >
               <item.icon size={24} strokeWidth={isActive ? 2.5 : 2} className={isActive ? "text-bloom-pink-deep" : "text-bloom-text-soft"} />
               <span className={`text-[10px] font-lato ${isActive ? "text-bloom-pink-deep font-bold" : "text-bloom-text-soft font-normal"}`}>
                 {item.name}
@@ -50,8 +57,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         
         <button 
           onClick={() => setMoreOpen(true)}
-          className="flex flex-col items-center justify-center w-16 h-full gap-1 active:scale-95 transition-transform"
+          className="flex flex-col items-center justify-center w-16 h-full gap-1 active:scale-95 transition-transform focus:outline-none focus:ring-2 focus:ring-bloom-pink-deep focus:ring-offset-2 rounded-lg"
           data-testid="nav-more"
+          aria-label="More sections"
+          aria-expanded={moreOpen}
         >
           <Grid size={24} strokeWidth={2} className="text-bloom-text-soft" />
           <span className="text-[10px] font-lato text-bloom-text-soft">More</span>

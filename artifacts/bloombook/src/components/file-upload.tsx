@@ -29,8 +29,38 @@ export function FileUpload({
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
   const hasCloudinary = !!(cloudName && uploadPreset);
 
+  const validateFile = (file: File): string | null => {
+    const maxImageSize = 10 * 1024 * 1024; // 10MB
+    const maxVideoSize = 100 * 1024 * 1024; // 100MB
+    const isVideo = file.type.startsWith("video/");
+    const maxSize = isVideo ? maxVideoSize : maxImageSize;
+
+    if (file.size > maxSize) {
+      const maxSizeMB = maxSize / (1024 * 1024);
+      return `File too large (max ${maxSizeMB}MB)`;
+    }
+
+    const validImageTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const validVideoTypes = ["video/mp4", "video/quicktime", "video/webm"];
+
+    if (isVideo && !validVideoTypes.includes(file.type)) {
+      return "Video format not supported. Try MP4, MOV, or WebM";
+    } else if (!isVideo && !validImageTypes.includes(file.type)) {
+      return "Image format not supported. Try JPG, PNG, WebP, or GIF";
+    }
+
+    return null;
+  };
+
   const processFile = async (file: File) => {
     setError("");
+    
+    const validation = validateFile(file);
+    if (validation) {
+      setError(validation);
+      return;
+    }
+
     const isVideo = file.type.startsWith("video/");
     const type: "image" | "video" = isVideo ? "video" : "image";
 
@@ -42,6 +72,7 @@ export function FileUpload({
 
     setUploading(true);
     setProgress(0);
+    let xhr: XMLHttpRequest | null = null;
 
     try {
       const formData = new FormData();
@@ -53,26 +84,40 @@ export function FileUpload({
       const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
 
       const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
+        xhr = new XMLHttpRequest();
+        
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 90));
         };
+        
         xhr.onload = () => {
-          setProgress(100);
-          try { resolve(JSON.parse(xhr.responseText)); }
-          catch { reject(new Error("Invalid response")); }
+          if (xhr!.status >= 200 && xhr!.status < 300) {
+            setProgress(100);
+            try { resolve(JSON.parse(xhr!.responseText)); }
+            catch { reject(new Error("Invalid response from server")); }
+          } else {
+            const errorData = JSON.parse(xhr!.responseText);
+            reject(new Error(errorData.error?.message || "Upload failed"));
+          }
         };
-        xhr.onerror = () => reject(new Error("Upload failed"));
-        xhr.open("POST", url);
+        
+        xhr.onerror = () => reject(new Error("Network error during upload"));
+        xhr.onabort = () => reject(new Error("Upload cancelled"));
+        
+        xhr.open("POST", url, true);
+        xhr.timeout = 120000; // 2 minute timeout
+        xhr.ontimeout = () => reject(new Error("Upload timed out"));
         xhr.send(formData);
       });
 
       onChange(result.secure_url, type);
     } catch (err) {
-      setError("Upload failed. Try again?");
-      console.error(err);
+      const errorMsg = err instanceof Error ? err.message : "Upload failed";
+      setError(errorMsg);
+      console.error("[FileUpload] Error:", errorMsg);
     } finally {
       setUploading(false);
+      xhr = null;
     }
   };
 
