@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Coffee, MapPin, Star, Check, X, Plus } from "lucide-react";
 import { Drawer } from "vaul";
 import { EmptyState } from "@/components/empty-state";
+import { FileUpload } from "@/components/file-upload";
 import { useToast } from "@/hooks/use-toast";
 
 export default function CafePassport() {
@@ -23,6 +24,7 @@ export default function CafePassport() {
   const [whatWeAte, setWhatWeAte] = useState("");
   const [reflection, setReflection] = useState("");
   const [wouldVisitAgain, setWouldVisitAgain] = useState(true);
+  const [photoUrl, setPhotoUrl] = useState("");
 
   const createCafe = useCreateCafe({
     mutation: {
@@ -45,6 +47,7 @@ export default function CafePassport() {
     setWhatWeAte("");
     setReflection("");
     setWouldVisitAgain(true);
+    setPhotoUrl("");
   };
 
   const handleAdd = (e: React.FormEvent) => {
@@ -58,7 +61,8 @@ export default function CafePassport() {
         rating,
         whatWeAte,
         reflection,
-        wouldVisitAgain
+        wouldVisitAgain,
+        photoUrl: photoUrl || undefined
       }
     });
   };
@@ -142,6 +146,17 @@ export default function CafePassport() {
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="diary-label">photo</label>
+                  <FileUpload
+                    value={photoUrl}
+                    mediaType="image"
+                    onChange={(url) => setPhotoUrl(url)}
+                    onClear={() => setPhotoUrl("")}
+                    accept="image"
+                  />
                 </div>
 
                 <div className="space-y-1.5">

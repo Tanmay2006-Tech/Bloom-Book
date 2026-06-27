@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Heart, Search, Play, Plus, X, Image as ImageIcon } from "lucide-react";
 import { Drawer } from "vaul";
 import { EmptyState } from "@/components/empty-state";
+import { FileUpload } from "@/components/file-upload";
 import { useToast } from "@/hooks/use-toast";
 
 export default function MemoryWall() {
@@ -275,21 +276,14 @@ export default function MemoryWall() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="diary-label">photo or video link</label>
-                  <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)}
-                    className="w-full h-10 diary-field font-lato text-bloom-dark text-sm"
-                    placeholder="paste a URL..." />
-                </div>
-
-                <div className="flex gap-3">
-                  <button type="button" onClick={() => setMediaType("image")}
-                    className={`flex-1 py-2.5 rounded-full font-lato text-sm transition-all border ${mediaType === 'image' ? 'bg-bloom-pink-deep text-white border-bloom-pink-deep shadow-sm' : 'bg-white/60 text-bloom-soft border-bloom-pink-light'}`}>
-                    Photo
-                  </button>
-                  <button type="button" onClick={() => setMediaType("video")}
-                    className={`flex-1 py-2.5 rounded-full font-lato text-sm transition-all border ${mediaType === 'video' ? 'bg-bloom-pink-deep text-white border-bloom-pink-deep shadow-sm' : 'bg-white/60 text-bloom-soft border-bloom-pink-light'}`}>
-                    Video
-                  </button>
+                  <label className="diary-label">photo or video</label>
+                  <FileUpload
+                    value={mediaUrl}
+                    mediaType={mediaType as "image" | "video"}
+                    onChange={(url, type) => { setMediaUrl(url); setMediaType(type); }}
+                    onClear={() => setMediaUrl("")}
+                    accept="both"
+                  />
                 </div>
 
                 <div className="space-y-1">

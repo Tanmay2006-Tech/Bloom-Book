@@ -61,7 +61,7 @@ export default function Dashboard() {
         <div className="absolute -top-5 left-2 w-20 h-5 rounded-sm"
           style={{ background: "linear-gradient(90deg,#F2C4CE,#FAE8EE)", opacity: 0.55, transform: "rotate(-1deg)" }} />
 
-        <div className="font-caveat text-[26px] text-bloom-pink-deep/80 mt-1">Dear Diary,</div>
+        <div className="font-caveat text-[22px] text-bloom-soft/60 mt-1">every little moment, kept safe</div>
         <div className="flex items-center gap-2 mt-0.5">
           <h1 className="font-playfair italic text-[38px] text-bloom-dark tracking-[-0.02em] leading-tight">BloomBook</h1>
           <svg className="opacity-25 mb-1" width="18" height="18" viewBox="0 0 40 40" fill="none">

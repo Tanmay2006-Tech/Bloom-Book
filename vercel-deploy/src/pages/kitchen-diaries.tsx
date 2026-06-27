@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Utensils, Heart, Star, Plus, X } from "lucide-react";
 import { Drawer } from "vaul";
 import { EmptyState } from "@/components/empty-state";
+import { FileUpload } from "@/components/file-upload";
 import { useToast } from "@/hooks/use-toast";
 
 export default function KitchenDiaries() {
@@ -159,8 +160,14 @@ export default function KitchenDiaries() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="diary-label">Photo URL</label>
-                  <input value={photoUrl} onChange={e => setPhotoUrl(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-peach-lt focus:outline-none focus:border-bloom-peach font-lato text-bloom-dark" placeholder="https://..." />
+                  <label className="diary-label">photo</label>
+                  <FileUpload
+                    value={photoUrl}
+                    mediaType="image"
+                    onChange={(url) => setPhotoUrl(url)}
+                    onClear={() => setPhotoUrl("")}
+                    accept="image"
+                  />
                 </div>
                 
                 <div className="flex gap-4">
@@ -208,7 +215,7 @@ export default function KitchenDiaries() {
                   disabled={createEntry.isPending || !title}
                   className="w-full py-4 rounded-full bg-gradient-to-r from-bloom-peach to-[#ECA87B] text-white font-lato font-bold text-lg shadow-[0_4px_16px_rgba(245,198,160,0.4)] active:scale-95 transition-transform disabled:opacity-50 mt-4"
                 >
-                  {createEntry.isPending ? "Adding..." : "Add to Diary"}
+                  {createEntry.isPending ? "Saving..." : "Save this dish"}
                 </button>
               </form>
             </div>
