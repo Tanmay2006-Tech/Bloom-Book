@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListMemories, useToggleMemoryFavorite, useCreateMemory, useDeleteMemory, getListMemoriesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
+import { useListMemories, useToggleMemoryFavorite, useCreateMemory, useDeleteMemory, getListMemoriesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -248,50 +248,63 @@ export default function MemoryWall() {
       <Drawer.Root open={addOpen} onOpenChange={setAddOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
+          <Drawer.Content className="diary-page flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-pink-deep/30 my-4" />
-            <div className="px-6 pb-6 pt-2 flex justify-between items-center">
-              <h2 className="font-playfair italic text-2xl text-bloom-dark">New Memory</h2>
-              <button onClick={() => setAddOpen(false)} className="p-2 bg-white rounded-full text-bloom-soft">
+            <div className="px-6 pb-4 pt-2 flex justify-between items-start">
+              <div>
+                <div className="font-caveat text-bloom-soft text-lg">{format(new Date(date), "d MMMM yyyy")}</div>
+                <h2 className="font-playfair italic text-2xl text-bloom-dark">a new memory</h2>
+              </div>
+              <button onClick={() => setAddOpen(false)} className="p-2 bg-white/60 rounded-full text-bloom-soft mt-1">
                 <X size={20} />
               </button>
             </div>
             <div className="px-6 overflow-y-auto pb-10">
-              <form onSubmit={handleAdd} className="space-y-5">
-                <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Title *</label>
-                  <input required value={title} onChange={e => setTitle(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink-deep font-lato text-bloom-dark" placeholder="What happened?" />
-                </div>
-                
-                <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Date</label>
-                  <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink-deep font-lato text-bloom-dark" />
-                </div>
-                
-                <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Media URL</label>
-                  <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink-deep font-lato text-bloom-dark" placeholder="https://..." />
-                </div>
-                
-                <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Media Type</label>
-                  <div className="flex gap-2">
-                    <button type="button" onClick={() => setMediaType("image")} className={`flex-1 py-3 rounded-[14px] font-lato text-sm transition-all ${mediaType === 'image' ? 'bg-bloom-pink-deep text-white shadow-md' : 'bg-white text-bloom-soft border border-bloom-pink-light'}`}>Image</button>
-                    <button type="button" onClick={() => setMediaType("video")} className={`flex-1 py-3 rounded-[14px] font-lato text-sm transition-all ${mediaType === 'video' ? 'bg-bloom-pink-deep text-white shadow-md' : 'bg-white text-bloom-soft border border-bloom-pink-light'}`}>Video</button>
-                  </div>
+              <form onSubmit={handleAdd} className="space-y-6">
+                <div className="space-y-1">
+                  <label className="diary-label">what happened?</label>
+                  <input required value={title} onChange={e => setTitle(e.target.value)}
+                    className="w-full h-10 diary-field font-lato text-bloom-dark text-[16px]"
+                    placeholder="Give this memory a name..." />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Story</label>
-                  <textarea value={description} onChange={e => setDescription(e.target.value)} className="w-full h-32 p-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink-deep font-lato text-bloom-dark resize-none" placeholder="Write about it..." />
+                <div className="space-y-1">
+                  <label className="diary-label">when was it?</label>
+                  <input type="date" value={date} onChange={e => setDate(e.target.value)}
+                    className="w-full h-10 diary-field font-lato text-bloom-dark" />
                 </div>
 
-                <button 
-                  type="submit" 
+                <div className="space-y-1">
+                  <label className="diary-label">photo or video link</label>
+                  <input value={mediaUrl} onChange={e => setMediaUrl(e.target.value)}
+                    className="w-full h-10 diary-field font-lato text-bloom-dark text-sm"
+                    placeholder="paste a URL..." />
+                </div>
+
+                <div className="flex gap-3">
+                  <button type="button" onClick={() => setMediaType("image")}
+                    className={`flex-1 py-2.5 rounded-full font-lato text-sm transition-all border ${mediaType === 'image' ? 'bg-bloom-pink-deep text-white border-bloom-pink-deep shadow-sm' : 'bg-white/60 text-bloom-soft border-bloom-pink-light'}`}>
+                    Photo
+                  </button>
+                  <button type="button" onClick={() => setMediaType("video")}
+                    className={`flex-1 py-2.5 rounded-full font-lato text-sm transition-all border ${mediaType === 'video' ? 'bg-bloom-pink-deep text-white border-bloom-pink-deep shadow-sm' : 'bg-white/60 text-bloom-soft border-bloom-pink-light'}`}>
+                    Video
+                  </button>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="diary-label">tell the story...</label>
+                  <textarea value={description} onChange={e => setDescription(e.target.value)}
+                    className="w-full h-36 px-1 py-1 diary-textarea font-lato text-bloom-dark resize-none focus:outline-none"
+                    placeholder="what do you want to remember about this?" />
+                </div>
+
+                <button
+                  type="submit"
                   disabled={createMemory.isPending || !title}
-                  className="w-full py-4 rounded-full bg-gradient-to-r from-[#F2C4CE] to-[#E8A0B0] text-white font-lato font-bold text-lg shadow-[0_4px_16px_rgba(232,160,176,0.4)] active:scale-95 transition-transform disabled:opacity-50 mt-4"
+                  className="w-full py-4 rounded-full bg-gradient-to-r from-[#F2C4CE] to-[#E8A0B0] text-white font-lato font-bold text-lg shadow-[0_4px_16px_rgba(232,160,176,0.35)] active:scale-95 transition-transform disabled:opacity-50"
                 >
-                  {createMemory.isPending ? "Saving..." : "Keep this memory"}
+                  {createMemory.isPending ? "Saving..." : "Write it down"}
                 </button>
               </form>
             </div>
@@ -310,7 +323,7 @@ function MemoryCard({ memory, rotation, delay, onToggleFavorite, onClick }: { me
       transition={{ delay, duration: 0.4, type: "spring", stiffness: 300, damping: 25 }}
       style={{ rotate: `${rotation}deg` }}
       whileHover={{ rotate: "0deg", scale: 1.02 }}
-      className="bg-white p-2.5 pb-6 rounded-sm shadow-[0_4px_16px_rgba(232,160,176,0.15)] relative cursor-pointer"
+      className="polaroid rounded-sm relative cursor-pointer"
       onClick={onClick}
     >
       <div className="w-full aspect-[4/3] bg-bloom-pink-light rounded-sm overflow-hidden mb-3 relative">

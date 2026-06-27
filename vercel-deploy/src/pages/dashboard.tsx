@@ -1,4 +1,4 @@
-import { useGetStats, useGetTimeline } from "@/lib/api";
+import { useGetStats, useGetTimeline } from "@workspace/api-client-react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { ImageIcon, Coffee, Book, Film, Utensils, MessageCircle, Star, Sparkles } from "lucide-react";
@@ -57,21 +57,24 @@ export default function Dashboard() {
       className="pt-12 px-5"
     >
       <header className="mb-8 relative">
-        <span className="font-lato font-light text-bloom-soft text-sm tracking-wide">your little world</span>
-        <div className="flex items-center gap-2">
-          <h1 className="font-playfair italic text-[38px] text-bloom-dark tracking-[-0.02em] leading-tight mt-1">BloomBook</h1>
-          {/* tiny paw accent */}
-          <svg className="mt-2 opacity-30" width="18" height="18" viewBox="0 0 40 40" fill="none">
+        {/* Washi tape */}
+        <div className="absolute -top-5 left-2 w-20 h-5 rounded-sm"
+          style={{ background: "linear-gradient(90deg,#F2C4CE,#FAE8EE)", opacity: 0.55, transform: "rotate(-1deg)" }} />
+
+        <div className="font-caveat text-[26px] text-bloom-pink-deep/80 mt-1">Dear Diary,</div>
+        <div className="flex items-center gap-2 mt-0.5">
+          <h1 className="font-playfair italic text-[38px] text-bloom-dark tracking-[-0.02em] leading-tight">BloomBook</h1>
+          <svg className="opacity-25 mb-1" width="18" height="18" viewBox="0 0 40 40" fill="none">
             <ellipse cx="20" cy="26" rx="9" ry="7" fill="#E8A0B0" />
             <ellipse cx="11" cy="17" rx="4" ry="5" fill="#E8A0B0" />
             <ellipse cx="20" cy="14" rx="4" ry="5" fill="#E8A0B0" />
             <ellipse cx="29" cy="17" rx="4" ry="5" fill="#E8A0B0" />
           </svg>
         </div>
-        <div className="font-lato font-light text-[13px] text-bloom-soft mt-1">{today}</div>
+        <div className="font-caveat text-lg text-bloom-soft mt-0.5">{today}</div>
         {/* Floral cluster decoration */}
-        <div className="absolute -top-3 right-0 pointer-events-none">
-          <FlowerCluster className="w-[140px] h-[56px] opacity-60" />
+        <div className="absolute top-0 right-0 pointer-events-none">
+          <FlowerCluster className="w-[130px] h-[52px] opacity-55" />
         </div>
       </header>
 
@@ -88,13 +91,19 @@ export default function Dashboard() {
               initial={{ opacity: 0, y: 16, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: i * 0.06, duration: 0.4, type: "spring", stiffness: 400, damping: 30 }}
-              className={`w-[100px] h-[120px] rounded-[24px] ${stat.bg} flex-shrink-0 flex flex-col items-center justify-center p-4 snap-start shadow-[0_8px_16px_rgba(0,0,0,0.03)]`}
+              className={`w-[100px] flex-shrink-0 snap-start`}
+              style={{ transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (i % 3) * 0.8}deg)` }}
             >
-              <div className={`${stat.color} mb-2`}>
-                <stat.icon size={20} strokeWidth={2.5} />
+              {/* Washi tape on top */}
+              <div className="mx-auto w-10 h-3 rounded-sm mb-[-6px] relative z-10"
+                style={{ background: i % 3 === 0 ? "#F2C4CE" : i % 3 === 1 ? "#C9B8E8" : "#A8C8E8", opacity: 0.65 }} />
+              <div className={`diary-card rounded-[16px] ${stat.bg} flex flex-col items-center justify-center p-4 pt-5 h-[116px]`}>
+                <div className={`${stat.color} mb-1.5`}>
+                  <stat.icon size={18} strokeWidth={2.5} />
+                </div>
+                <span className="font-playfair text-[28px] text-bloom-dark leading-none">{stat.count}</span>
+                <span className="font-caveat text-[13px] text-bloom-soft mt-1.5">{stat.label}</span>
               </div>
-              <span className="font-playfair text-[28px] text-bloom-dark leading-none">{stat.count}</span>
-              <span className="font-lato font-light text-[11px] text-bloom-soft mt-2">{stat.label}</span>
             </motion.div>
           ))
         )}

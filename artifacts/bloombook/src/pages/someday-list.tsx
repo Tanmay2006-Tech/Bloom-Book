@@ -159,40 +159,36 @@ export default function SomedayList() {
       <Drawer.Root open={addOpen} onOpenChange={setAddOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[80vh] focus:outline-none">
+          <Drawer.Content className="diary-page flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[80vh] focus:outline-none">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-pink-deep/30 my-4" />
-            <div className="px-6 pb-6 pt-2 flex justify-between items-center">
-              <h2 className="font-playfair italic text-2xl text-bloom-dark">New Dream</h2>
-              <button onClick={() => setAddOpen(false)} className="p-2 bg-white rounded-full text-bloom-soft">
+            <div className="px-6 pb-4 pt-2 flex justify-between items-center">
+              <h2 className="font-playfair italic text-2xl text-bloom-dark">a new dream</h2>
+              <button onClick={() => setAddOpen(false)} className="p-2 bg-white/60 rounded-full text-bloom-soft">
                 <X size={20} />
               </button>
             </div>
             <div className="px-6 overflow-y-auto pb-10">
-              <form onSubmit={handleAdd} className="space-y-5">
-                
-                <div className="flex gap-4">
-                  <div className="space-y-1.5 w-20 flex-shrink-0">
-                    <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Emoji</label>
-                    <input value={emoji} onChange={e => setEmoji(e.target.value)} maxLength={2} className="w-full h-14 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink text-center text-2xl" placeholder="✨" />
-                  </div>
-
-                  <div className="space-y-1.5 flex-1">
-                    <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Title *</label>
-                    <input required value={title} onChange={e => setTitle(e.target.value)} className="w-full h-14 px-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink font-lato text-bloom-dark" placeholder="Visit Paris..." />
-                  </div>
-                </div>
-                
-                <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Notes</label>
-                  <textarea value={notes} onChange={e => setNotes(e.target.value)} className="w-full h-32 p-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink font-lato text-bloom-dark resize-none" placeholder="Details about this dream..." />
+              <form onSubmit={handleAdd} className="space-y-6">
+                <div className="space-y-1">
+                  <label className="diary-label">what do you dream of?</label>
+                  <input required value={title} onChange={e => setTitle(e.target.value)}
+                    className="w-full h-10 diary-field font-lato text-bloom-dark text-[16px]"
+                    placeholder="someday I want to..." />
                 </div>
 
-                <button 
-                  type="submit" 
+                <div className="space-y-1">
+                  <label className="diary-label">tell me more</label>
+                  <textarea value={notes} onChange={e => setNotes(e.target.value)}
+                    className="w-full h-32 px-1 py-1 diary-textarea font-lato text-bloom-dark resize-none focus:outline-none"
+                    placeholder="any details, notes, feelings about this..." />
+                </div>
+
+                <button
+                  type="submit"
                   disabled={createWish.isPending || !title}
-                  className="w-full py-4 rounded-full bg-gradient-to-r from-[#F2C4CE] to-[#E8A0B0] text-white font-lato font-bold text-lg shadow-[0_4px_16px_rgba(232,160,176,0.4)] active:scale-95 transition-transform disabled:opacity-50 mt-4"
+                  className="w-full py-4 rounded-full bg-gradient-to-r from-[#F2C4CE] to-[#E8A0B0] text-white font-lato font-bold text-lg shadow-[0_4px_16px_rgba(232,160,176,0.35)] active:scale-95 transition-transform disabled:opacity-50"
                 >
-                  {createWish.isPending ? "Adding..." : "Add to List"}
+                  {createWish.isPending ? "Adding..." : "Add to my list"}
                 </button>
               </form>
             </div>
@@ -209,7 +205,7 @@ function WishRow({ wish, delay, onToggle }: { wish: any, delay: number, onToggle
       initial={delay > 0 ? { opacity: 0, y: 10 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.3 }}
-      className="flex items-start gap-4 p-4 rounded-[20px] bg-white shadow-[0_2px_10px_rgba(232,160,176,0.1)] active:scale-95 transition-transform cursor-pointer"
+      className="flex items-start gap-4 p-4 rounded-[20px] diary-card active:scale-95 transition-transform cursor-pointer"
       onClick={onToggle}
     >
       <div className="w-12 h-12 rounded-full bg-bloom-pink-light flex items-center justify-center flex-shrink-0 text-2xl">

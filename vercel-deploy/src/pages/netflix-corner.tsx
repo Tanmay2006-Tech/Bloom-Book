@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListMovies, useCreateMovie, getListMoviesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
+import { useListMovies, useCreateMovie, getListMoviesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Film, Plus, Star, X } from "lucide-react";
@@ -96,23 +96,23 @@ export default function NetflixCorner() {
       <Drawer.Root open={addOpen} onOpenChange={setAddOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
+          <Drawer.Content className="diary-page flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-butter/60 my-4" />
             <div className="px-6 pb-6 pt-2 flex justify-between items-center">
               <h2 className="font-playfair italic text-2xl text-bloom-dark">New Watch</h2>
-              <button onClick={() => setAddOpen(false)} className="p-2 bg-white rounded-full text-bloom-soft">
+              <button onClick={() => setAddOpen(false)} className="p-2 bg-white/60 rounded-full text-bloom-soft">
                 <X size={20} />
               </button>
             </div>
             <div className="px-6 overflow-y-auto pb-10">
               <form onSubmit={handleAdd} className="space-y-5">
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Title *</label>
+                  <label className="diary-label">Title *</label>
                   <input required value={title} onChange={e => setTitle(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-butter-lt focus:outline-none focus:border-bloom-butter font-lato text-bloom-dark" />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Type</label>
+                  <label className="diary-label">Type</label>
                   <div className="flex gap-2">
                     <button type="button" onClick={() => setType("movie")} className={`flex-1 py-3 rounded-[14px] font-lato text-xs font-bold transition-all ${type === 'movie' ? 'bg-bloom-butter text-[#C9A430] shadow-sm' : 'bg-white text-bloom-soft border border-bloom-butter-lt'}`}>Movie</button>
                     <button type="button" onClick={() => setType("series")} className={`flex-1 py-3 rounded-[14px] font-lato text-xs font-bold transition-all ${type === 'series' ? 'bg-bloom-butter text-[#C9A430] shadow-sm' : 'bg-white text-bloom-soft border border-bloom-butter-lt'}`}>Series</button>
@@ -120,17 +120,17 @@ export default function NetflixCorner() {
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Genre</label>
+                  <label className="diary-label">Genre</label>
                   <input value={genre} onChange={e => setGenre(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-butter-lt focus:outline-none focus:border-bloom-butter font-lato text-bloom-dark" placeholder="Cozy, Thriller, Rom-Com..." />
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Poster URL</label>
+                  <label className="diary-label">Poster URL</label>
                   <input value={posterUrl} onChange={e => setPosterUrl(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-butter-lt focus:outline-none focus:border-bloom-butter font-lato text-bloom-dark" placeholder="https://..." />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Rating</label>
+                  <label className="diary-label">Rating</label>
                   <div className="flex gap-2 h-12 items-center px-2">
                     {[1, 2, 3, 4, 5].map(star => (
                       <button type="button" key={star} onClick={() => setRating(star)} className="active:scale-90 transition-transform p-1">
@@ -141,7 +141,7 @@ export default function NetflixCorner() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">What it reminded me of</label>
+                  <label className="diary-label">What it reminded me of</label>
                   <textarea value={whatItReminded} onChange={e => setWhatItReminded(e.target.value)} className="w-full h-24 p-4 rounded-[14px] bg-white border border-bloom-butter-lt focus:outline-none focus:border-bloom-butter font-lato text-bloom-dark resize-none" placeholder="Felt just like..." />
                 </div>
 

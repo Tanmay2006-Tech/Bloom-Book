@@ -119,33 +119,33 @@ export default function Bookshelf() {
       <Drawer.Root open={addOpen} onOpenChange={setAddOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
+          <Drawer.Content className="diary-page flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-lavender/60 my-4" />
             <div className="px-6 pb-6 pt-2 flex justify-between items-center">
               <h2 className="font-playfair italic text-2xl text-bloom-dark">New Book</h2>
-              <button onClick={() => setAddOpen(false)} className="p-2 bg-white rounded-full text-bloom-soft">
+              <button onClick={() => setAddOpen(false)} className="p-2 bg-white/60 rounded-full text-bloom-soft">
                 <X size={20} />
               </button>
             </div>
             <div className="px-6 overflow-y-auto pb-10">
               <form onSubmit={handleAdd} className="space-y-5">
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Title *</label>
-                  <input required value={title} onChange={e => setTitle(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-lavender-lt focus:outline-none focus:border-bloom-lavender font-lato text-bloom-dark" />
+                  <label className="diary-label">Title *</label>
+                  <input required value={title} onChange={e => setTitle(e.target.value)} className="w-full h-10 diary-field font-lato text-bloom-dark text-[16px]" />
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Author</label>
-                  <input value={author} onChange={e => setAuthor(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-lavender-lt focus:outline-none focus:border-bloom-lavender font-lato text-bloom-dark" />
+                  <label className="diary-label">Author</label>
+                  <input value={author} onChange={e => setAuthor(e.target.value)} className="w-full h-10 diary-field font-lato text-bloom-dark text-[16px]" />
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Cover URL</label>
-                  <input value={coverUrl} onChange={e => setCoverUrl(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-lavender-lt focus:outline-none focus:border-bloom-lavender font-lato text-bloom-dark" placeholder="https://..." />
+                  <label className="diary-label">Cover URL</label>
+                  <input value={coverUrl} onChange={e => setCoverUrl(e.target.value)} className="w-full h-10 diary-field font-lato text-bloom-dark text-[16px]" placeholder="https://..." />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Status</label>
+                  <label className="diary-label">Status</label>
                   <div className="flex gap-2">
                     <button type="button" onClick={() => setStatus("want_to_read")} className={`flex-1 py-3 rounded-[14px] font-lato text-xs font-bold transition-all ${status === 'want_to_read' ? 'bg-bloom-lavender text-[#8A6BC0] shadow-sm' : 'bg-white text-bloom-soft border border-bloom-lavender-lt'}`}>Want to</button>
                     <button type="button" onClick={() => setStatus("reading")} className={`flex-1 py-3 rounded-[14px] font-lato text-xs font-bold transition-all ${status === 'reading' ? 'bg-bloom-lavender text-[#8A6BC0] shadow-sm' : 'bg-white text-bloom-soft border border-bloom-lavender-lt'}`}>Reading</button>
@@ -155,7 +155,7 @@ export default function Bookshelf() {
 
                 {status === "read" && (
                   <div className="space-y-1.5 animate-in fade-in zoom-in duration-300">
-                    <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Rating</label>
+                    <label className="diary-label">Rating</label>
                     <div className="flex gap-2 h-12 items-center px-2">
                       {[1, 2, 3, 4, 5].map(star => (
                         <button type="button" key={star} onClick={() => setRating(star)} className="active:scale-90 transition-transform p-1">
@@ -174,12 +174,12 @@ export default function Bookshelf() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Favorite Quote</label>
+                  <label className="diary-label">Favorite Quote</label>
                   <textarea value={quote} onChange={e => setQuote(e.target.value)} className="w-full h-20 p-4 rounded-[14px] bg-white border border-bloom-lavender-lt focus:outline-none focus:border-bloom-lavender font-lato italic text-bloom-dark resize-none" placeholder='"..."' />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Reflection</label>
+                  <label className="diary-label">Reflection</label>
                   <textarea value={reflection} onChange={e => setReflection(e.target.value)} className="w-full h-24 p-4 rounded-[14px] bg-white border border-bloom-lavender-lt focus:outline-none focus:border-bloom-lavender font-lato text-bloom-dark resize-none" placeholder="Thoughts after reading..." />
                 </div>
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListCapsules, useCreateCapsule, useUnlockCapsule, getListCapsulesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
+import { useListCapsules, useCreateCapsule, useUnlockCapsule, getListCapsulesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { format, differenceInDays } from "date-fns";
 import { motion } from "framer-motion";
@@ -111,28 +111,28 @@ export default function MemoryCapsules() {
       <Drawer.Root open={addOpen} onOpenChange={setAddOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
+          <Drawer.Content className="diary-page flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-blue/60 my-4" />
             <div className="px-6 pb-6 pt-2 flex justify-between items-center">
               <h2 className="font-playfair italic text-2xl text-bloom-dark">New Capsule</h2>
-              <button onClick={() => setAddOpen(false)} className="p-2 bg-white rounded-full text-bloom-soft">
+              <button onClick={() => setAddOpen(false)} className="p-2 bg-white/60 rounded-full text-bloom-soft">
                 <X size={20} />
               </button>
             </div>
             <div className="px-6 overflow-y-auto pb-10">
               <form onSubmit={handleAdd} className="space-y-6">
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Title *</label>
+                  <label className="diary-label">Title *</label>
                   <input required value={title} onChange={e => setTitle(e.target.value)} className="w-full h-14 px-4 rounded-[14px] bg-white border border-bloom-blue-lt focus:outline-none focus:border-bloom-blue font-lato text-bloom-dark text-lg" placeholder="To my 30-year-old self" />
                 </div>
                 
                 <div className="space-y-1.5 flex-1 flex flex-col">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Message *</label>
+                  <label className="diary-label">Message *</label>
                   <textarea required value={message} onChange={e => setMessage(e.target.value)} className="w-full h-48 p-4 rounded-[14px] bg-white border border-bloom-blue-lt focus:outline-none focus:border-bloom-blue font-lato text-bloom-dark resize-none leading-relaxed" placeholder="Dear future me..." />
                 </div>
 
                 <div className="space-y-3">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">When to open</label>
+                  <label className="diary-label">When to open</label>
                   <div className="grid grid-cols-2 gap-2">
                     {["1 Year", "5 Years", "10 Years", "Custom"].map(p => (
                       <button 

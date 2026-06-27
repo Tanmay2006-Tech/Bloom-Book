@@ -108,33 +108,33 @@ export default function CafePassport() {
       <Drawer.Root open={addOpen} onOpenChange={setAddOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
+          <Drawer.Content className="diary-page flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-peach/40 my-4" />
             <div className="px-6 pb-6 pt-2 flex justify-between items-center">
               <h2 className="font-playfair italic text-2xl text-bloom-dark">New Stamp</h2>
-              <button onClick={() => setAddOpen(false)} className="p-2 bg-white rounded-full text-bloom-soft">
+              <button onClick={() => setAddOpen(false)} className="p-2 bg-white/60 rounded-full text-bloom-soft">
                 <X size={20} />
               </button>
             </div>
             <div className="px-6 overflow-y-auto pb-10">
               <form onSubmit={handleAdd} className="space-y-5">
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Cafe Name *</label>
+                  <label className="diary-label">Cafe Name *</label>
                   <input required value={name} onChange={e => setName(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-peach-lt focus:outline-none focus:border-bloom-peach font-lato text-bloom-dark" placeholder="The little corner shop..." />
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Location</label>
+                  <label className="diary-label">Location</label>
                   <input value={location} onChange={e => setLocation(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-peach-lt focus:outline-none focus:border-bloom-peach font-lato text-bloom-dark" placeholder="City, neighborhood..." />
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Date</label>
+                  <label className="diary-label">Date</label>
                   <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-peach-lt focus:outline-none focus:border-bloom-peach font-lato text-bloom-dark" />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Rating</label>
+                  <label className="diary-label">Rating</label>
                   <div className="flex gap-2 h-12 items-center px-2">
                     {[1, 2, 3, 4, 5].map(star => (
                       <button type="button" key={star} onClick={() => setRating(star)} className="active:scale-90 transition-transform p-1">
@@ -145,12 +145,12 @@ export default function CafePassport() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">What we ate</label>
+                  <label className="diary-label">What we ate</label>
                   <textarea value={whatWeAte} onChange={e => setWhatWeAte(e.target.value)} className="w-full h-20 p-4 rounded-[14px] bg-white border border-bloom-peach-lt focus:outline-none focus:border-bloom-peach font-lato text-bloom-dark resize-none" placeholder="Almond croissant and matcha latte..." />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Reflection</label>
+                  <label className="diary-label">Reflection</label>
                   <textarea value={reflection} onChange={e => setReflection(e.target.value)} className="w-full h-24 p-4 rounded-[14px] bg-white border border-bloom-peach-lt focus:outline-none focus:border-bloom-peach font-lato text-bloom-dark resize-none" placeholder="Loved the natural light..." />
                 </div>
 

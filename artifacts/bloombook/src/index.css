@@ -188,3 +188,80 @@ body {
 .text-bloom-dark { color: var(--bloom-text-dark); }
 .text-bloom-mid { color: var(--bloom-text-mid); }
 .text-bloom-soft { color: var(--bloom-text-soft); }
+
+/* ─── Diary / Journal Classes ──────────────────────────────── */
+
+/* Form drawer background — lined notebook paper */
+.diary-page {
+  background-color: #FFFDF9;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 31px,
+    rgba(242, 196, 206, 0.22) 31px,
+    rgba(242, 196, 206, 0.22) 32px
+  );
+}
+
+/* Textarea with ruled lines */
+.diary-textarea {
+  background-image: repeating-linear-gradient(
+    transparent, transparent 27px,
+    rgba(242, 196, 206, 0.28) 27px,
+    rgba(242, 196, 206, 0.28) 28px
+  );
+  background-color: transparent;
+  line-height: 28px;
+}
+
+/* Bottom-only border input (notebook line feel) */
+.diary-field {
+  border: none !important;
+  border-bottom: 1.5px solid rgba(242, 196, 206, 0.6) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+.diary-field:focus {
+  outline: none !important;
+  border-bottom-color: #E8A0B0 !important;
+  box-shadow: none !important;
+}
+
+/* Warm paper card */
+.diary-card {
+  background: #FFFCF8;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04), 0 0 0 1px rgba(242,196,206,0.15);
+}
+
+/* Polaroid photo card */
+.polaroid {
+  background: #FFFFFF;
+  padding: 8px 8px 28px 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* Washi tape strip decoration */
+.washi {
+  height: 18px;
+  border-radius: 2px;
+  opacity: 0.7;
+  transform: rotate(-1.5deg);
+}
+
+/* Section chapter label */
+.chapter-label {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  opacity: 0.55;
+}
+
+/* Diary label style — replaces uppercase tracker labels */
+.diary-label {
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  color: var(--bloom-text-soft);
+  display: block;
+  margin-bottom: 4px;
+}

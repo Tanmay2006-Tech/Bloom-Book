@@ -108,11 +108,11 @@ export default function RandomReviews() {
       <Drawer.Root open={addOpen} onOpenChange={setAddOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
+          <Drawer.Content className="diary-page flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh] h-[90vh] focus:outline-none">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-pink/60 my-4" />
             <div className="px-6 pb-6 pt-2 flex justify-between items-center">
               <h2 className="font-playfair italic text-2xl text-bloom-dark">New Review</h2>
-              <button onClick={() => setAddOpen(false)} className="p-2 bg-white rounded-full text-bloom-soft">
+              <button onClick={() => setAddOpen(false)} className="p-2 bg-white/60 rounded-full text-bloom-soft">
                 <X size={20} />
               </button>
             </div>
@@ -120,17 +120,17 @@ export default function RandomReviews() {
               <form onSubmit={handleAdd} className="space-y-6">
                 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Subject *</label>
+                  <label className="diary-label">Subject *</label>
                   <input required value={subject} onChange={e => setSubject(e.target.value)} className="w-full h-14 px-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink font-lato text-bloom-dark text-lg" placeholder="e.g. That one pen, this obscure album..." />
                 </div>
                 
                 <div className="flex gap-4">
                   <div className="space-y-1.5 flex-1">
-                    <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Category</label>
-                    <input value={category} onChange={e => setCategory(e.target.value)} className="w-full h-12 px-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink font-lato text-bloom-dark" placeholder="Music, Object, Place..." />
+                    <label className="diary-label">Category</label>
+                    <input value={category} onChange={e => setCategory(e.target.value)} className="w-full h-10 diary-field font-lato text-bloom-dark" placeholder="Music, Object, Place..." />
                   </div>
                   <div className="space-y-1.5 flex-1">
-                    <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Rating</label>
+                    <label className="diary-label">Rating</label>
                     <div className="flex gap-1 h-12 items-center px-1">
                       {[1, 2, 3, 4, 5].map(star => (
                         <button type="button" key={star} onClick={() => setRating(star)} className="active:scale-90 transition-transform p-1">
@@ -142,7 +142,7 @@ export default function RandomReviews() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">Vibe Check</label>
+                  <label className="diary-label">Vibe Check</label>
                   <div className="flex flex-wrap gap-2">
                     {vibes.map((v, i) => (
                       <motion.button 
@@ -161,7 +161,7 @@ export default function RandomReviews() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="font-lato font-bold text-xs uppercase tracking-wider text-bloom-text-mid">The Review *</label>
+                  <label className="diary-label">The Review *</label>
                   <textarea required value={reviewText} onChange={e => setReviewText(e.target.value)} className="w-full h-32 p-4 rounded-[14px] bg-white border border-bloom-pink-light focus:outline-none focus:border-bloom-pink font-lato text-bloom-dark resize-none leading-relaxed" placeholder="Spill..." />
                 </div>
 
