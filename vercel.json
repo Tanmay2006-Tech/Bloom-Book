@@ -1,0 +1,24 @@
+{
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "env": {
+    "PORT": {
+      "description": "Server port for development",
+      "default": "5173"
+    },
+    "BASE_PATH": {
+      "description": "Base path for routing",
+      "default": "/"
+    },
+    "VITE_CLOUDINARY_CLOUD_NAME": {
+      "description": "Cloudinary cloud name for image hosting"
+    },
+    "VITE_CLOUDINARY_UPLOAD_PRESET": {
+      "description": "Cloudinary upload preset"
+    }
+  },
+  "framework": null,
+  "outputDirectory": "artifacts/bloombook/dist",
+  "nodeVersion": "20.x",
+  "regions": ["iad1"]
+}
