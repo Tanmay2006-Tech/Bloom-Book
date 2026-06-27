@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { ImageIcon, Coffee, Book, Film, Utensils, MessageCircle, Star, Sparkles } from "lucide-react";
 import { EmptyState } from "@/components/empty-state";
+import { FlowerCluster } from "@/components/floral-deco";
 
 export default function Dashboard() {
   const { data: stats, isLoading: statsLoading } = useGetStats();
@@ -55,10 +56,23 @@ export default function Dashboard() {
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="pt-12 px-5"
     >
-      <header className="mb-8">
+      <header className="mb-8 relative">
         <span className="font-lato font-light text-bloom-soft text-sm tracking-wide">your little world</span>
-        <h1 className="font-playfair italic text-[38px] text-bloom-dark tracking-[-0.02em] leading-tight mt-1">BloomBook</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="font-playfair italic text-[38px] text-bloom-dark tracking-[-0.02em] leading-tight mt-1">BloomBook</h1>
+          {/* tiny paw accent */}
+          <svg className="mt-2 opacity-30" width="18" height="18" viewBox="0 0 40 40" fill="none">
+            <ellipse cx="20" cy="26" rx="9" ry="7" fill="#E8A0B0" />
+            <ellipse cx="11" cy="17" rx="4" ry="5" fill="#E8A0B0" />
+            <ellipse cx="20" cy="14" rx="4" ry="5" fill="#E8A0B0" />
+            <ellipse cx="29" cy="17" rx="4" ry="5" fill="#E8A0B0" />
+          </svg>
+        </div>
         <div className="font-lato font-light text-[13px] text-bloom-soft mt-1">{today}</div>
+        {/* Floral cluster decoration */}
+        <div className="absolute -top-3 right-0 pointer-events-none">
+          <FlowerCluster className="w-[140px] h-[56px] opacity-60" />
+        </div>
       </header>
 
       {/* Stats Row */}
@@ -86,8 +100,24 @@ export default function Dashboard() {
         )}
       </div>
 
+      {/* Botanical separator */}
+      <div className="flex items-center gap-3 my-8 -mx-1">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-bloom-pink-deep/25 to-transparent" />
+        <div className="flex items-center gap-1.5 opacity-40">
+          {["#E8A0B0","#C9B8E8","#A8C8E8","#C9B8E8","#E8A0B0"].map((c, i) => (
+            <svg key={i} width="10" height="10" viewBox="0 0 36 36" fill="none">
+              <ellipse cx="18" cy="18" rx="4" ry="8" fill={c} />
+              <ellipse cx="18" cy="18" rx="4" ry="8" fill={c} transform="rotate(60 18 18)" />
+              <ellipse cx="18" cy="18" rx="4" ry="8" fill={c} opacity="0.6" transform="rotate(120 18 18)" />
+              <circle cx="18" cy="18" r="3" fill="#F5E6A3" />
+            </svg>
+          ))}
+        </div>
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-bloom-pink-deep/25 to-transparent" />
+      </div>
+
       {/* Timeline */}
-      <section className="mt-10 mb-8">
+      <section className="mb-8">
         <h2 className="font-playfair italic text-[22px] text-bloom-dark mb-6">Recently</h2>
         
         {timelineLoading ? (

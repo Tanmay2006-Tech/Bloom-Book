@@ -152,6 +152,15 @@ body {
   max-width: 480px;
   margin: 0 auto;
   background: var(--bloom-cream);
+  background-image:
+    radial-gradient(ellipse 6px 10px at 92% 14%, rgba(242,196,206,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 10px 6px at 92% 14%, rgba(242,196,206,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 5px 9px at 8% 38%, rgba(201,184,232,0.15) 0%, transparent 100%),
+    radial-gradient(ellipse 9px 5px at 8% 38%, rgba(201,184,232,0.15) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 7px at 88% 62%, rgba(168,200,232,0.12) 0%, transparent 100%),
+    radial-gradient(ellipse 7px 4px at 88% 62%, rgba(168,200,232,0.12) 0%, transparent 100%),
+    radial-gradient(ellipse 5px 8px at 5% 80%, rgba(242,196,206,0.14) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 5px at 5% 80%, rgba(242,196,206,0.14) 0%, transparent 100%);
   min-height: 100vh;
   position: relative;
   box-shadow: 0 0 40px rgba(0,0,0,0.05);

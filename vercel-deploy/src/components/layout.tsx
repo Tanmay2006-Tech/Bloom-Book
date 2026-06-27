@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Drawer } from "vaul";
-import { Home, Image as ImageIcon, Coffee, Utensils, Grid, Plus, Book, Film, Star, Mail, MessageCircle } from "lucide-react";
+import { Home, Image as ImageIcon, Coffee, Utensils, Grid, Book, Film, Star, Mail, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -65,7 +65,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh]">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-pink-deep/30 my-4" />
             <div className="px-6 pb-12 pt-2">
-              <h2 className="font-playfair italic text-2xl text-bloom-dark mb-6">More Places</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-playfair italic text-2xl text-bloom-dark">More Places</h2>
+                {/* Tiny floral row accent */}
+                <div className="flex items-center gap-1.5 opacity-50">
+                  {["#F2C4CE","#C9B8E8","#A8C8E8"].map((c, i) => (
+                    <svg key={i} width="16" height="16" viewBox="0 0 36 36" fill="none">
+                      <ellipse cx="18" cy="18" rx="4" ry="8" fill={c} />
+                      <ellipse cx="18" cy="18" rx="4" ry="8" fill={c} transform="rotate(60 18 18)" />
+                      <ellipse cx="18" cy="18" rx="4" ry="8" fill={c} opacity="0.6" transform="rotate(120 18 18)" />
+                      <circle cx="18" cy="18" r="3.5" fill="#F5E6A3" />
+                    </svg>
+                  ))}
+                </div>
+              </div>
               <div className="grid grid-cols-4 gap-y-8 gap-x-2">
                 {moreItems.map((item) => (
                   <button
