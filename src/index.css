@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&family=Caveat:wght@400;600&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-primary-border: var(--sidebar-primary-border);
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-accent-border: var(--sidebar-accent-border);
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root, .dark {
+  --bloom-cream: #FFF8F0;
+  --bloom-pink: #F2C4CE;
+  --bloom-pink-light: #FAE8EE;
+  --bloom-pink-deep: #E8A0B0;
+  --bloom-lavender: #C9B8E8;
+  --bloom-lavender-lt: #EDE6F8;
+  --bloom-butter: #F5E6A3;
+  --bloom-butter-lt: #FDF6D3;
+  --bloom-peach: #F5C6A0;
+  --bloom-peach-lt: #FDE8D8;
+  --bloom-blue: #A8C8E8;
+  --bloom-blue-lt: #DCF0FF;
+  --bloom-sage: #A8C8A0;
+  --bloom-sage-lt: #DFF0DA;
+  --bloom-text-dark: #2D1F1A;
+  --bloom-text-mid: #6B4F47;
+  --bloom-text-soft: #A0827A;
+
+  --background: 36 100% 97%;
+  --foreground: 14 24% 15%;
+  --card: 36 100% 97%;
+  --card-foreground: 14 24% 15%;
+  --card-border: 349 67% 84%;
+  --border: 349 67% 84%;
+  --input: 349 67% 84%;
+  --ring: 349 67% 79%;
+  --primary: 349 67% 79%;
+  --primary-foreground: 36 100% 97%;
+  --secondary: 349 67% 93%;
+  --secondary-foreground: 14 24% 15%;
+  --muted: 349 67% 93%;
+  --muted-foreground: 14 28% 43%;
+  --accent: 349 67% 93%;
+  --accent-foreground: 14 24% 15%;
+  --destructive: 0 72% 60%;
+  --destructive-foreground: 36 100% 97%;
+  --popover: 36 100% 97%;
+  --popover-foreground: 14 24% 15%;
+  --sidebar: 36 100% 97%;
+  --sidebar-foreground: 14 24% 15%;
+  --sidebar-border: 349 67% 84%;
+  --sidebar-primary: 349 67% 79%;
+  --sidebar-primary-foreground: 36 100% 97%;
+  --sidebar-accent: 349 67% 93%;
+  --sidebar-accent-foreground: 14 24% 15%;
+  --sidebar-ring: 349 67% 79%;
+  --chart-1: 349 67% 79%;
+  --chart-2: 280 46% 75%;
+  --chart-3: 45 80% 78%;
+  --chart-4: 27 75% 77%;
+  --chart-5: 211 53% 74%;
+  --radius: 1.25rem;
+  --app-font-sans: 'Lato', sans-serif;
+  --app-font-serif: 'Playfair Display', serif;
+  --app-font-mono: 'Lato', monospace;
+  
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+  --opaque-button-border-intensity: -8;
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .08);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  /* Safe area support for notch devices */
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+* { scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+::selection { background: #FAE8EE; }
+:focus-visible { outline: 2px solid #F2C4CE; outline-offset: 2px; }
+
+body {
+  background: var(--bloom-cream);
+  color: var(--bloom-text-dark);
+  font-family: 'Lato', sans-serif;
+}
+
+#root {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bloom-cream);
+  background-image:
+    radial-gradient(ellipse 6px 10px at 92% 14%, rgba(242,196,206,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 10px 6px at 92% 14%, rgba(242,196,206,0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 5px 9px at 8% 38%, rgba(201,184,232,0.15) 0%, transparent 100%),
+    radial-gradient(ellipse 9px 5px at 8% 38%, rgba(201,184,232,0.15) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 7px at 88% 62%, rgba(168,200,232,0.12) 0%, transparent 100%),
+    radial-gradient(ellipse 7px 4px at 88% 62%, rgba(168,200,232,0.12) 0%, transparent 100%),
+    radial-gradient(ellipse 5px 8px at 5% 80%, rgba(242,196,206,0.14) 0%, transparent 100%),
+    radial-gradient(ellipse 8px 5px at 5% 80%, rgba(242,196,206,0.14) 0%, transparent 100%);
+  min-height: 100vh;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.05);
+}
+
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-lato { font-family: 'Lato', sans-serif; }
+.font-caveat { font-family: 'Caveat', cursive; }
+
+.bg-bloom-cream { background-color: var(--bloom-cream); }
+.bg-bloom-pink { background-color: var(--bloom-pink); }
+.bg-bloom-pink-light { background-color: var(--bloom-pink-light); }
+.bg-bloom-pink-deep { background-color: var(--bloom-pink-deep); }
+.bg-bloom-lavender { background-color: var(--bloom-lavender); }
+.bg-bloom-lavender-lt { background-color: var(--bloom-lavender-lt); }
+.bg-bloom-butter { background-color: var(--bloom-butter); }
+.bg-bloom-butter-lt { background-color: var(--bloom-butter-lt); }
+.bg-bloom-peach { background-color: var(--bloom-peach); }
+.bg-bloom-peach-lt { background-color: var(--bloom-peach-lt); }
+.bg-bloom-blue { background-color: var(--bloom-blue); }
+.bg-bloom-blue-lt { background-color: var(--bloom-blue-lt); }
+.bg-bloom-sage { background-color: var(--bloom-sage); }
+.bg-bloom-sage-lt { background-color: var(--bloom-sage-lt); }
+
+.text-bloom-dark { color: var(--bloom-text-dark); }
+.text-bloom-mid { color: var(--bloom-text-mid); }
+.text-bloom-soft { color: var(--bloom-text-soft); }
+
+/* ─── Diary / Journal Classes ──────────────────────────────── */
+
+/* Form drawer background — lined notebook paper */
+.diary-page {
+  background-color: #FFFDF9;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 31px,
+    rgba(242, 196, 206, 0.22) 31px,
+    rgba(242, 196, 206, 0.22) 32px
+  );
+}
+
+/* Textarea with ruled lines */
+.diary-textarea {
+  background-image: repeating-linear-gradient(
+    transparent, transparent 27px,
+    rgba(242, 196, 206, 0.28) 27px,
+    rgba(242, 196, 206, 0.28) 28px
+  );
+  background-color: transparent;
+  line-height: 28px;
+}
+
+/* Bottom-only border input (notebook line feel) */
+.diary-field {
+  border: none !important;
+  border-bottom: 1.5px solid rgba(242, 196, 206, 0.6) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+.diary-field:focus {
+  outline: none !important;
+  border-bottom-color: #E8A0B0 !important;
+  box-shadow: none !important;
+}
+
+/* Warm paper card */
+.diary-card {
+  background: #FFFCF8;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04), 0 0 0 1px rgba(242,196,206,0.15);
+}
+
+/* Polaroid photo card */
+.polaroid {
+  background: #FFFFFF;
+  padding: 8px 8px 28px 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* Washi tape strip decoration */
+.washi {
+  height: 18px;
+  border-radius: 2px;
+  opacity: 0.7;
+  transform: rotate(-1.5deg);
+}
+
+/* Section chapter label */
+.chapter-label {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  opacity: 0.55;
+}
+
+/* Diary label style — replaces uppercase tracker labels */
+.diary-label {
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  color: var(--bloom-text-soft);
+  display: block;
+  margin-bottom: 4px;
+}
