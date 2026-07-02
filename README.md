@@ -1,70 +1,196 @@
-# BloomBook
+<div align="center">
+  <img src="vercel-deploy/public/favicon.svg" width="88" alt="BloomBook flower mark" />
+  <h1>BloomBook</h1>
+  <p><strong>Where little moments bloom forever.</strong></p>
+  <p>A private, mobile-first memory journal for photographs, films, places, stories, recipes, wishes, and the tiny details worth keeping.</p>
 
-BloomBook is a mobile-first personal memory journal built with React 19, Vite, Express, Drizzle, PostgreSQL, and Cloudinary. The production app installs and deploys from the repository root with standard npm.
+  <p>
+    <a href="https://bloom-book-api-server.vercel.app"><strong>Open BloomBook</strong></a>
+    ·
+    <a href="https://bloom-book-api-server.vercel.app/api/healthz">API health</a>
+    ·
+    <a href="docs/PRODUCTION_REPORT.md">Production report</a>
+  </p>
 
-The detailed architecture, API, database, dependency, and user-flow audit is in [`docs/ARCHITECTURE_AUDIT.md`](docs/ARCHITECTURE_AUDIT.md).
+  <p>
+    <img alt="Node 22" src="https://img.shields.io/badge/Node.js-22-5FA04E?logo=node.js&logoColor=white" />
+    <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111" />
+    <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white" />
+    <img alt="Vercel" src="https://img.shields.io/badge/Vercel-ready-000?logo=vercel" />
+    <img alt="Median" src="https://img.shields.io/badge/Median.co-mobile_ready-E8A0B0" />
+  </p>
+</div>
 
-## Local development
+---
 
-Requirements: Node.js 22 and npm 10 or newer.
+## The journal
+
+BloomBook wraps a production web application and API in a warm, tactile scrapbook experience designed primarily for phones and Median.co webviews.
+
+| Space | What it preserves |
+| --- | --- |
+| Memory Wall | Photographs, videos, dates, captions, and favorites |
+| Café Passport | Places, dishes, ratings, and return-worthy discoveries |
+| Bookshelf | Books, quotes, reflections, ratings, and lasting reads |
+| Movie Corner | Films, genres, ratings, and associations |
+| Someday List | Wishes, notes, and completed dreams |
+| Memory Capsules | Messages protected until their unlock date |
+| Kitchen Diaries | Recipes, photographs, moods, notes, and ratings |
+| Random Reviews | Reviews of anything worth having an opinion about |
+
+## Engineering highlights
+
+- React 19, strict TypeScript, Vite 7, Tailwind CSS 4, and route-level code splitting.
+- TanStack Query with bounded retries, abort propagation, foreground refresh, and reconnect recovery.
+- Express 5 serverless API with Zod validation, defensive headers, JSON limits, and consistent failure responses.
+- PostgreSQL through Drizzle ORM and a serverless-conscious connection pool.
+- Cloudinary image/video uploads with validation, progress, timeout, cancellation, retry, and previews.
+- Global and route-level error boundaries, Suspense fallbacks, offline shell, and service-worker recovery.
+- Median-ready safe areas, dynamic viewport units, 44 px touch targets, reduced-motion support, and deep links.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  A["React + Vite client"] -->|"/api/*"| B["Vercel Express function"]
+  B --> C["Zod request contracts"]
+  B --> D["Drizzle ORM"]
+  D --> E[(PostgreSQL)]
+  A -->|"unsigned restricted upload"| F["Cloudinary"]
+  G["Median.co webview"] --> A
+```
+
+The deployable client and serverless API live in `vercel-deploy/`. Shared source artifacts and the OpenAPI contract live in `artifacts/` and `lib/`. Read the complete [architecture audit](docs/ARCHITECTURE_AUDIT.md) for dependency, database, API, and user-flow details.
+
+## Quick start
+
+### Requirements
+
+- Node.js 22
+- npm 10+
+- PostgreSQL database
+- Cloudinary unsigned upload preset for persistent media
+
+### Install and run
 
 ```bash
+git clone https://github.com/Tanmay2006-Tech/Bloom-Book.git
+cd Bloom-Book
 npm install
 copy .env.production.example .env.local
 npm run dev
 ```
 
-The Vite client runs on `http://localhost:5173`; the local API runs on `http://localhost:3001`. Before a release, run:
+Open `http://localhost:5173`. The local API listens on `http://localhost:3001`.
+
+On macOS or Linux, replace the `copy` command with:
 
 ```bash
-npm run typecheck
-npm run build
-npm run smoke:api
+cp .env.production.example .env.local
 ```
 
-`npm run smoke:api` deliberately passes without database credentials only when the health route remains available and data routes return a clear configuration error.
+## Environment
 
-## Environment variables
+| Variable | Required | Exposure | Purpose |
+| --- | :---: | --- | --- |
+| `DATABASE_URL` | Yes | Server only | PostgreSQL connection string |
+| `SESSION_SECRET` | Reserved | Server only | Future authentication/session signing; use 32+ random bytes |
+| `VITE_CLOUDINARY_CLOUD_NAME` | For media | Public | Cloudinary cloud identifier |
+| `VITE_CLOUDINARY_UPLOAD_PRESET` | For media | Public | Restricted unsigned upload preset |
+| `CORS_ORIGIN` | Recommended | Server only | Comma-separated trusted origins |
+| `NODE_ENV` | Production | Server | Runtime mode |
 
-- `DATABASE_URL` (required): pooled PostgreSQL connection string. Use the provider's SSL-enabled production URL.
-- `SESSION_SECRET` (reserved): at least 32 random bytes for the authentication layer. The current single-journal release has no login/session feature and does not read this value yet.
-- `VITE_CLOUDINARY_CLOUD_NAME` (required for media): public Cloudinary cloud name.
-- `VITE_CLOUDINARY_UPLOAD_PRESET` (required for media): unsigned preset restricted by MIME type, size, folder, and allowed formats in Cloudinary.
-- `CORS_ORIGIN` (recommended): comma-separated trusted web origins. If omitted, the API reflects the request origin for webview compatibility.
-- `NODE_ENV`: set to `production` in production.
+Never put passwords or private API keys in a `VITE_` variable—Vite intentionally exposes those values to the browser.
 
-Never put database passwords, API secrets, or signed Cloudinary credentials in a `VITE_` variable; Vite variables are public browser configuration. Missing media variables show a recoverable message and do not prevent text memories from being saved. Missing `DATABASE_URL` leaves `/api/healthz` operational and returns a clear error from data routes.
+## Quality commands
 
-## Vercel deployment
+```bash
+npm run typecheck       # strict TypeScript validation
+npm run build           # typecheck + production Vite build
+npm run smoke:api       # local health and missing-database behavior
+npm run smoke:live-api  # full deployed CRUD suite with automatic cleanup
+```
 
-1. Import this repository into Vercel and keep the Root Directory at the repository root.
-2. Select Node.js 22. `vercel.json` supplies `npm run build` and `vercel-deploy/dist`.
-3. Add `DATABASE_URL`, `SESSION_SECRET`, `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_CLOUDINARY_UPLOAD_PRESET`, `CORS_ORIGIN`, and `NODE_ENV=production` to Production and Preview as appropriate.
-4. Provision the database schema before directing users to the deployment.
-5. Deploy, then verify `/api/healthz`, create/read/delete one disposable record, upload one image and one video, refresh a deep link, and run the mobile checks below.
+The live suite defaults to BloomBook’s deployed API. Override it when testing Preview deployments:
 
-## Median.co packaging
+```bash
+API_BASE_URL=https://your-preview.vercel.app npm run smoke:live-api
+```
 
-1. Complete the Vercel deployment and use its canonical HTTPS URL as the Median app URL.
-2. Enable iOS photo-library/camera and Android camera/media permissions. Microphone and location are not required.
-3. Keep external navigation inside an allowlist containing the Vercel domain and `api.cloudinary.com`.
-4. Enable pull-to-refresh only if it does not conflict with journal scrolling. Preserve cookies and DOM storage.
-5. Use the light status bar/theme color `#FFF8F0`; the client accounts for all four safe-area insets.
-6. Test camera/gallery selection, a 100 MB video, cancellation, offline recovery, keyboard drawers, back navigation, notches, Dynamic Island, and Android system navigation on real devices.
+PowerShell:
 
-## Production launch checklist
+```powershell
+$env:API_BASE_URL="https://your-preview.vercel.app"; npm run smoke:live-api
+```
 
-- [ ] `npm install`, `npm run build`, and `npx vite build` pass from a clean checkout on Node 22.
-- [ ] Database schema, backups, restore drill, pooling, and provider alerts are configured.
-- [ ] Cloudinary preset is unsigned but tightly restricted; upload quota alerts are enabled.
-- [ ] A private access layer or authentication is enabled before sharing the URL beyond its intended recipient.
-- [ ] Vercel preview and production environment variables are independently verified.
-- [ ] CRUD and API failure paths are tested against the production database.
-- [ ] iPhone and Android real-device smoke tests pass in Median.
-- [ ] Privacy policy, data export, and deletion procedure are documented for real users.
-- [ ] Error monitoring and uptime monitoring are connected.
+The live suite creates disposable records with a `Codex API check` prefix and removes every created record in a `finally` cleanup—even if a later assertion fails.
 
-## Current security boundary
+## API
 
-The API validates payload shape, uses parameterized Drizzle queries, limits JSON bodies, suppresses framework disclosure, adds defensive response headers, and returns generic internal errors. React escapes displayed text. However, the current data model is a single shared journal and has no authentication or per-user ownership. Do not expose it as a public multi-user service until authentication, authorization, ownership columns, rate limiting, and CSRF protection are implemented.
+Production base: [`https://bloom-book-api-server.vercel.app/api`](https://bloom-book-api-server.vercel.app/api/healthz)
 
+| Resource | Operations |
+| --- | --- |
+| `/healthz`, `/stats`, `/timeline` | Health, dashboard totals, recent activity |
+| `/memories` | List, create, read, update, delete, favorite |
+| `/cafes` | List, create, read, update, delete |
+| `/books` | List/filter, create, read, update, delete |
+| `/movies` | List, create, read, update, delete |
+| `/wishlist` | List, create, update, delete, complete |
+| `/capsules` | List, create, read, delete, unlock |
+| `/kitchen` | List/filter, create, read, update, delete |
+| `/reviews` | List, create, read, update, delete |
+
+The source of truth is [OpenAPI](lib/api-spec/openapi.yaml). Generated query clients and schemas keep the browser and API contract aligned.
+
+## Deploy to Vercel
+
+1. Import the GitHub repository into Vercel.
+2. Keep **Root Directory** at the repository root.
+3. Select **Node.js 22**.
+4. Add the production environment variables above.
+5. Deploy. Root `vercel.json` runs `npm run build`, serves `vercel-deploy/dist`, routes `/api/*` to the serverless function, and rewrites all remaining paths to the SPA.
+6. Run `npm run smoke:live-api` against the deployment before promoting it.
+
+If an existing Vercel project uses `vercel-deploy` as its Root Directory, that directory also has an independent npm lockfile and deployment configuration.
+
+## Deploy the Neon database
+
+Set the Neon pooled connection string as `DATABASE_URL` in `.env.local`, then run:
+
+```bash
+npm run db:migrate
+```
+
+This applies the checked-in eight-table migration and records it in `__drizzle_migrations`. Use `npm run db:push` only for development or a deliberate empty-database bootstrap. See the [Database Deployment Report](docs/DATABASE_DEPLOYMENT_REPORT.md) for the full table map, indexes, environment behavior, and release workflow.
+
+## Package with Median.co
+
+1. Deploy a canonical HTTPS Vercel URL.
+2. Use that URL as the Median app URL.
+3. Enable iOS camera/photo-library and Android camera/media permissions.
+4. Allowlist the Vercel origin and `api.cloudinary.com`.
+5. Preserve DOM storage and navigation history; test Android system back gestures.
+6. Use `#FFF8F0` for the status/navigation bar theme.
+7. Certify uploads, cancellation, offline recovery, keyboard drawers, notches, Dynamic Island, and gesture navigation on physical Samsung, Pixel, and iPhone devices.
+
+See the [Median.co Mobile Readiness Report](docs/PRODUCTION_REPORT.md#medianco-mobile-readiness-report) for scores, risks, and required device checks.
+
+## Security boundary
+
+BloomBook currently models one private shared journal. API inputs are validated, SQL is parameterized, request sizes and database waits are bounded, internal failures are concealed, and browser output is escaped—but there is no authentication or per-user ownership yet.
+
+Keep the deployment private or behind Vercel protection. Before public or multi-user distribution, add authentication, authorization, ownership columns, rate limiting, CSRF controls, data export/deletion, monitoring, and a privacy policy.
+
+## Documentation
+
+- [Architecture audit](docs/ARCHITECTURE_AUDIT.md)
+- [Production and Median readiness report](docs/PRODUCTION_REPORT.md)
+- [Database deployment report](docs/DATABASE_DEPLOYMENT_REPORT.md)
+- [OpenAPI contract](lib/api-spec/openapi.yaml)
+
+---
+
+<div align="center">
+  <sub>Built as a gift. Engineered to keep the meaningful things close.</sub>
+</div>

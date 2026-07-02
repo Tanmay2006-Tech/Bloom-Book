@@ -2,6 +2,12 @@
 
 Date: 2026-07-02
 
+## Live deployment check
+
+The deployment at `https://bloom-book-api-server.vercel.app` returned `200 {"status":"ok"}` from `/api/healthz`, but `/api/stats` and all tested database-backed collection routes timed out without response on 2026-07-02. The repository fix adds five-second connection and ten-second query/statement deadlines and upgrades the nested Vercel package to Express 5 so async database failures reach the JSON error handler. A new `npm run smoke:live-api` command covers every endpoint family with disposable records and guaranteed cleanup.
+
+The deployed `DATABASE_URL` must still be verified in Vercel and these changes redeployed before the live API can pass. A set-but-unreachable database URL is the most likely cause; a missing URL would have produced the application’s immediate configuration error instead of hanging.
+
 ## Outcome
 
 BloomBook now has a standard-npm production path from the repository root and an independently installable `vercel-deploy/` path for existing Vercel projects configured with that Root Directory. Both package graphs contain npm lockfiles and neither production manifest uses workspace protocols.

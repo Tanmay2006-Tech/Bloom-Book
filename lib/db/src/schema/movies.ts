@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, integer, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -11,7 +11,7 @@ export const moviesTable = pgTable("movies", {
   whatItReminded: text("what_it_reminded"),
   posterUrl: text("poster_url"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (table) => [index("movies_created_at_idx").on(table.createdAt)]);
 
 export const insertMovieSchema = createInsertSchema(moviesTable).omit({ id: true, createdAt: true });
 export type InsertMovie = z.infer<typeof insertMovieSchema>;

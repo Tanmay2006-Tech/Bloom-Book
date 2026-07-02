@@ -226,6 +226,9 @@ function WishRow({ wish, delay, onToggle }: { wish: any, delay: number, onToggle
 
       <div className="pt-2">
         <button 
+          type="button"
+          onClick={(event) => { event.stopPropagation(); onToggle(); }}
+          aria-label={wish.isDone ? `Mark ${wish.title} as not done` : `Mark ${wish.title} as done`}
           className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${wish.isDone ? 'bg-bloom-pink-deep border-bloom-pink-deep' : 'border-bloom-pink bg-transparent'}`}
         >
           <motion.div

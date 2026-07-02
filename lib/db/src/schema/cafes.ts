@@ -1,4 +1,4 @@
-import { pgTable, text, boolean, timestamp, date, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, boolean, timestamp, date, integer, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
@@ -13,7 +13,7 @@ export const cafesTable = pgTable("cafes", {
   reflection: text("reflection"),
   wouldVisitAgain: boolean("would_visit_again").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (table) => [index("cafes_created_at_idx").on(table.createdAt)]);
 
 export const insertCafeSchema = createInsertSchema(cafesTable).omit({ id: true, createdAt: true });
 export type InsertCafe = z.infer<typeof insertCafeSchema>;

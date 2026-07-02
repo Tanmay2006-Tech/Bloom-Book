@@ -12,7 +12,15 @@ import { z } from "zod";
 const { Pool } = pkg;
 
 const databaseUrl = process.env.DATABASE_URL;
-const pool = databaseUrl ? new Pool({ connectionString: databaseUrl }) : null;
+const pool = databaseUrl ? new Pool({
+  connectionString: databaseUrl,
+  max: 5,
+  connectionTimeoutMillis: 5_000,
+  idleTimeoutMillis: 30_000,
+  query_timeout: 10_000,
+  statement_timeout: 10_000,
+  allowExitOnIdle: true,
+}) : null;
 const db = (pool ? drizzle(pool) : null) as ReturnType<typeof drizzle>;
 
 const memoriesTable = pgTable("memories", {
