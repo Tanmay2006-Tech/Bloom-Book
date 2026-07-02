@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListMemories, useToggleMemoryFavorite, useCreateMemory, useDeleteMemory, getListMemoriesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
+import { useListMemories, useToggleMemoryFavorite, useCreateMemory, useDeleteMemory, getListMemoriesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { motion } from "framer-motion";

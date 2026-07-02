@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListKitchenEntries, useCreateKitchenEntry, getListKitchenEntriesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
+import { useListKitchenEntries, useCreateKitchenEntry, getListKitchenEntriesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { motion } from "framer-motion";

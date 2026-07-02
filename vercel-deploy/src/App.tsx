@@ -1,26 +1,39 @@
 import { Switch, Route, Router as WouterRouter } from "wouter";
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Layout } from "@/components/layout";
 import { SplashScreen } from "@/components/splash-screen";
+import { ErrorBoundary } from "@/components/error-boundary";
 
-import Dashboard from "@/pages/dashboard";
-import MemoryWall from "@/pages/memory-wall";
-import CafePassport from "@/pages/cafe-passport";
-import Bookshelf from "@/pages/bookshelf";
-import NetflixCorner from "@/pages/netflix-corner";
-import SomedayList from "@/pages/someday-list";
-import MemoryCapsules from "@/pages/memory-capsules";
-import KitchenDiaries from "@/pages/kitchen-diaries";
-import RandomReviews from "@/pages/random-reviews";
-import NotFound from "@/pages/not-found";
+const Dashboard = lazy(() => import("@/pages/dashboard"));
+const MemoryWall = lazy(() => import("@/pages/memory-wall"));
+const CafePassport = lazy(() => import("@/pages/cafe-passport"));
+const Bookshelf = lazy(() => import("@/pages/bookshelf"));
+const NetflixCorner = lazy(() => import("@/pages/netflix-corner"));
+const SomedayList = lazy(() => import("@/pages/someday-list"));
+const MemoryCapsules = lazy(() => import("@/pages/memory-capsules"));
+const KitchenDiaries = lazy(() => import("@/pages/kitchen-diaries"));
+const RandomReviews = lazy(() => import("@/pages/random-reviews"));
+const NotFound = lazy(() => import("@/pages/not-found"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (count, error) => count < 2 && !("status" in error && Number(error.status) < 500),
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
+    },
+    mutations: { retry: 0 },
+  },
+});
 
 function Router() {
   return (
     <Layout>
+      <ErrorBoundary resetKey={window.location.pathname}>
+      <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center font-caveat text-xl text-bloom-soft" role="status">opening your journal…</div>}>
       <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/wall" component={MemoryWall} />
@@ -33,12 +46,15 @@ function Router() {
         <Route path="/reviews" component={RandomReviews} />
         <Route component={NotFound} />
       </Switch>
+      </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }
 
 function App() {
   return (
+    <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <SplashScreen />
@@ -48,6 +64,7 @@ function App() {
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

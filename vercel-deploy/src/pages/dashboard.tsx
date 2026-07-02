@@ -1,4 +1,4 @@
-import { useGetStats, useGetTimeline } from "@workspace/api-client-react";
+import { useGetStats, useGetTimeline } from "@/lib/api";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { ImageIcon, Coffee, Book, Film, Utensils, MessageCircle, Star, Sparkles } from "lucide-react";

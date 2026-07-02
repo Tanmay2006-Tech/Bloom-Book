@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListReviews, useCreateReview, getListReviewsQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
+import { useListReviews, useCreateReview, getListReviewsQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { motion } from "framer-motion";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListMovies, useCreateMovie, getListMoviesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
+import { useListMovies, useCreateMovie, getListMoviesQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Film, Plus, Star, X } from "lucide-react";

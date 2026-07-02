@@ -5,4 +5,6 @@ import { setBaseUrl } from "@/lib/custom-fetch";
 
 setBaseUrl("");
 
-createRoot(document.getElementById("root")!).render(<App />);
+const root = document.getElementById("root");
+if (!root) throw new Error("BloomBook could not find its application root.");
+createRoot(root).render(<App />);

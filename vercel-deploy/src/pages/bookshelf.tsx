@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListBooks, useCreateBook, getListBooksQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@workspace/api-client-react";
+import { useListBooks, useCreateBook, getListBooksQueryKey, getGetStatsQueryKey, getGetTimelineQueryKey } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Book as BookIcon, Plus, Star, X } from "lucide-react";

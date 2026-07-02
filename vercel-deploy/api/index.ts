@@ -11,12 +11,9 @@ import { z } from "zod";
 
 const { Pool } = pkg;
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is required");
-}
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const db = drizzle(pool);
+const databaseUrl = process.env.DATABASE_URL;
+const pool = databaseUrl ? new Pool({ connectionString: databaseUrl }) : null;
+const db = (pool ? drizzle(pool) : null) as ReturnType<typeof drizzle>;
 
 const memoriesTable = pgTable("memories", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -136,10 +133,37 @@ const CreateReviewBody = createInsertSchema(reviewsTable).omit({ id: true, creat
 const UpdateReviewBody = createInsertSchema(reviewsTable).omit({ id: true, createdAt: true }).partial();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.disable("x-powered-by");
+app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",").map(value => value.trim()) ?? true }));
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(self), microphone=(), geolocation=()");
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
+app.use(express.json({ limit: "1mb" }));
 
-app.get("/api/healthz", (_req, res) => res.json({ ok: true }));
+app.get("/api/healthz", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.use("/api", (req, res, next) => {
+  if (req.path === "/healthz") {
+    next();
+    return;
+  }
+
+  if (!databaseUrl) {
+    res.status(500).json({
+      error: "Server is not configured. Set DATABASE_URL in Vercel environment variables.",
+    });
+    return;
+  }
+
+  next();
+});
 
 app.get("/api/stats", async (_req, res) => {
   const [m, c, b, mv, k, r, w] = await Promise.all([
@@ -401,6 +425,16 @@ app.patch("/api/reviews/:id", async (req, res) => {
 app.delete("/api/reviews/:id", async (req, res) => {
   await db.delete(reviewsTable).where(eq(reviewsTable.id, req.params.id));
   res.sendStatus(204);
+});
+
+app.use("/api", (_req, res) => {
+  res.status(404).json({ error: "API route not found" });
+});
+
+app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error("BloomBook API request failed", error);
+  if (res.headersSent) return;
+  res.status(500).json({ error: "BloomBook could not complete that request. Please try again." });
 });
 
 export default app;

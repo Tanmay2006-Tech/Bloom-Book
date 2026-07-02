@@ -10,6 +10,8 @@ export type AuthTokenGetter = () => Promise<string | null> | string | null;
 
 const NO_BODY_STATUS = new Set([204, 205, 304]);
 const DEFAULT_JSON_ACCEPT = "application/json, application/problem+json";
+const REQUEST_TIMEOUT_MS = 12_000;
+const RETRY_DELAYS_MS = [350, 900];
 
 // ---------------------------------------------------------------------------
 // Module-level configuration
@@ -360,7 +362,31 @@ export async function customFetch<T = unknown>(
 
   const requestInfo = { method, url: resolveUrl(input) };
 
-  const response = await fetch(input, { ...init, method, headers });
+  let response: Response | undefined;
+  let lastError: unknown;
+  const attempts = method === "GET" ? RETRY_DELAYS_MS.length + 1 : 1;
+
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = globalThis.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    const abort = () => controller.abort();
+    init.signal?.addEventListener("abort", abort, { once: true });
+
+    try {
+      response = await fetch(input, { ...init, method, headers, signal: controller.signal });
+      if (response.status < 500 || attempt === attempts - 1) break;
+    } catch (error) {
+      lastError = error;
+      if (init.signal?.aborted || attempt === attempts - 1) throw error;
+    } finally {
+      globalThis.clearTimeout(timeout);
+      init.signal?.removeEventListener("abort", abort);
+    }
+
+    await new Promise((resolve) => globalThis.setTimeout(resolve, RETRY_DELAYS_MS[attempt]));
+  }
+
+  if (!response) throw lastError ?? new Error("The request could not be completed.");
 
   if (!response.ok) {
     const errorData = await parseErrorBody(response, method);

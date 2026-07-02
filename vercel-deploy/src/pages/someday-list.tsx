@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useListWishlist, useCreateWish, useToggleWishDone, getListWishlistQueryKey, getGetStatsQueryKey } from "@workspace/api-client-react";
+import { useListWishlist, useCreateWish, useToggleWishDone, getListWishlistQueryKey, getGetStatsQueryKey } from "@/lib/api";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Plus, X, ChevronDown, Check } from "lucide-react";

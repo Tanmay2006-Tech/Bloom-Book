@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { Camera, Video, X, Upload } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -19,7 +19,9 @@ export function FileUpload({
   accept = "both",
   className = "",
 }: FileUploadProps) {
+  const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
+  const requestRef = useRef<XMLHttpRequest | null>(null);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
@@ -31,12 +33,25 @@ export function FileUpload({
 
   const processFile = async (file: File) => {
     setError("");
+    const isImage = file.type.startsWith("image/");
     const isVideo = file.type.startsWith("video/");
+    if (!isImage && !isVideo) {
+      setError("Choose a supported image or video file.");
+      return;
+    }
+    if ((accept === "image" && !isImage) || (accept === "video" && !isVideo)) {
+      setError(`This memory needs ${accept === "image" ? "an image" : "a video"}.`);
+      return;
+    }
+    const maxBytes = isVideo ? 100 * 1024 * 1024 : 15 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      setError(`${isVideo ? "Videos" : "Images"} must be smaller than ${isVideo ? "100 MB" : "15 MB"}.`);
+      return;
+    }
     const type: "image" | "video" = isVideo ? "video" : "image";
 
     if (!hasCloudinary) {
-      const localUrl = URL.createObjectURL(file);
-      onChange(localUrl, type);
+      setError("Media uploads are not configured yet. You can still save this memory without media.");
       return;
     }
 
@@ -54,25 +69,36 @@ export function FileUpload({
 
       const result = await new Promise<{ secure_url: string }>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
+        requestRef.current = xhr;
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 90));
         };
         xhr.onload = () => {
-          setProgress(100);
-          try { resolve(JSON.parse(xhr.responseText)); }
-          catch { reject(new Error("Invalid response")); }
+          if (xhr.status < 200 || xhr.status >= 300) {
+            reject(new Error("The media service rejected this upload."));
+            return;
+          }
+          try {
+            const parsed = JSON.parse(xhr.responseText) as { secure_url?: string };
+            if (!parsed.secure_url) throw new Error("Missing media URL");
+            setProgress(100);
+            resolve({ secure_url: parsed.secure_url });
+          } catch { reject(new Error("The media service returned an invalid response.")); }
         };
         xhr.onerror = () => reject(new Error("Upload failed"));
+        xhr.onabort = () => reject(new DOMException("Upload cancelled", "AbortError"));
+        xhr.timeout = 120_000;
+        xhr.ontimeout = () => reject(new Error("Upload timed out"));
         xhr.open("POST", url);
         xhr.send(formData);
       });
 
       onChange(result.secure_url, type);
     } catch (err) {
-      setError("Upload failed. Try again?");
-      console.error(err);
+      setError(err instanceof DOMException && err.name === "AbortError" ? "Upload cancelled." : "Upload failed. Check your connection and try again.");
     } finally {
       setUploading(false);
+      requestRef.current = null;
     }
   };
 
@@ -94,7 +120,7 @@ export function FileUpload({
   const clear = () => {
     if (inputRef.current) inputRef.current.value = "";
     onClear?.();
-    onChange("", "image");
+    onChange("", mediaType);
   };
 
   return (
@@ -105,7 +131,8 @@ export function FileUpload({
         accept={acceptAttr}
         className="hidden"
         onChange={handleFileChange}
-        id="file-upload-input"
+        id={inputId}
+        aria-label="Choose a photo or video"
       />
 
       <AnimatePresence mode="wait">
@@ -151,6 +178,9 @@ export function FileUpload({
                   </span>
                 </div>
                 <p className="font-caveat text-bloom-soft mt-2">uploading...</p>
+                <button type="button" onClick={() => requestRef.current?.abort()} className="mt-3 min-h-11 px-4 rounded-full bg-white text-bloom-dark shadow-sm">
+                  Cancel upload
+                </button>
               </div>
             )}
 
@@ -158,8 +188,9 @@ export function FileUpload({
             {!uploading && (
               <div className="absolute top-2 right-2 flex gap-1.5">
                 <label
-                  htmlFor="file-upload-input"
+                  htmlFor={inputId}
                   className="w-9 h-9 bg-white/85 backdrop-blur-sm rounded-full flex items-center justify-center cursor-pointer shadow-sm hover:bg-white transition-colors"
+                  aria-label="Replace media"
                 >
                   <Camera size={15} className="text-bloom-dark" />
                 </label>
@@ -167,6 +198,7 @@ export function FileUpload({
                   type="button"
                   onClick={clear}
                   className="w-9 h-9 bg-white/85 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors"
+                  aria-label="Remove media"
                 >
                   <X size={15} className="text-bloom-dark" />
                 </button>
@@ -179,7 +211,7 @@ export function FileUpload({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            htmlFor="file-upload-input"
+            htmlFor={inputId}
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
@@ -213,7 +245,7 @@ export function FileUpload({
       </AnimatePresence>
 
       {error && (
-        <p className="font-caveat text-sm text-red-400 mt-1 text-center">{error}</p>
+        <p className="font-caveat text-sm text-red-500 mt-1 text-center" role="alert">{error}</p>
       )}
     </div>
   );
