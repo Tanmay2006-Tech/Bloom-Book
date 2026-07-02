@@ -1,11 +1,12 @@
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { lazy, Suspense } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Layout } from "@/components/layout";
 import { SplashScreen } from "@/components/splash-screen";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { AppStatus } from "@/components/app-status";
 
 const Dashboard = lazy(() => import("@/pages/dashboard"));
 const MemoryWall = lazy(() => import("@/pages/memory-wall"));
@@ -19,6 +20,12 @@ const RandomReviews = lazy(() => import("@/pages/random-reviews"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: () => window.dispatchEvent(new Event("bloombook:api-error")),
+  }),
+  mutationCache: new MutationCache({
+    onError: () => window.dispatchEvent(new Event("bloombook:api-error")),
+  }),
   defaultOptions: {
     queries: {
       retry: (count, error) => count < 2 && !("status" in error && Number(error.status) < 500),
@@ -57,6 +64,7 @@ function App() {
     <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <AppStatus />
         <SplashScreen />
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />

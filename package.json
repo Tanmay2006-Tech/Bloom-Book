@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "concurrently \"vite\" \"tsx watch vercel-deploy/api/_server.ts\"",
-    "build": "npm run typecheck && vite build",
+    "build": "npm run typecheck && vite build --configLoader runner",
     "typecheck": "tsc -p vercel-deploy/tsconfig.json --noEmit",
     "smoke:api": "tsx vercel-deploy/scripts/smoke-api.ts",
     "verify:deploy": "npm run build && npm run smoke:api",

@@ -26,6 +26,7 @@ export function FileUpload({
   const [progress, setProgress] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState("");
+  const [failedFile, setFailedFile] = useState<File | null>(null);
 
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
@@ -33,6 +34,7 @@ export function FileUpload({
 
   const processFile = async (file: File) => {
     setError("");
+    setFailedFile(null);
     const isImage = file.type.startsWith("image/");
     const isVideo = file.type.startsWith("video/");
     if (!isImage && !isVideo) {
@@ -94,7 +96,9 @@ export function FileUpload({
       });
 
       onChange(result.secure_url, type);
+      setFailedFile(null);
     } catch (err) {
+      setFailedFile(file);
       setError(err instanceof DOMException && err.name === "AbortError" ? "Upload cancelled." : "Upload failed. Check your connection and try again.");
     } finally {
       setUploading(false);
@@ -189,7 +193,7 @@ export function FileUpload({
               <div className="absolute top-2 right-2 flex gap-1.5">
                 <label
                   htmlFor={inputId}
-                  className="w-9 h-9 bg-white/85 backdrop-blur-sm rounded-full flex items-center justify-center cursor-pointer shadow-sm hover:bg-white transition-colors"
+                  className="w-11 h-11 bg-white/85 backdrop-blur-sm rounded-full flex items-center justify-center cursor-pointer shadow-sm hover:bg-white transition-colors"
                   aria-label="Replace media"
                 >
                   <Camera size={15} className="text-bloom-dark" />
@@ -197,7 +201,7 @@ export function FileUpload({
                 <button
                   type="button"
                   onClick={clear}
-                  className="w-9 h-9 bg-white/85 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors"
+                  className="w-11 h-11 bg-white/85 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors"
                   aria-label="Remove media"
                 >
                   <X size={15} className="text-bloom-dark" />
@@ -246,6 +250,11 @@ export function FileUpload({
 
       {error && (
         <p className="font-caveat text-sm text-red-500 mt-1 text-center" role="alert">{error}</p>
+      )}
+      {failedFile && !uploading && (
+        <button type="button" onClick={() => void processFile(failedFile)} className="mx-auto mt-2 min-h-11 px-5 rounded-full bg-bloom-pink-light text-bloom-dark font-lato text-sm font-bold flex items-center gap-2">
+          <Upload size={16} aria-hidden="true" /> Retry upload
+        </button>
       )}
     </div>
   );

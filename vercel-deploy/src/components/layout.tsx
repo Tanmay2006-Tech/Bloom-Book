@@ -24,7 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="flex flex-col min-h-[100dvh] w-full max-w-[480px] mx-auto bg-bloom-cream relative overflow-hidden shadow-2xl pb-[88px]">
+    <div className="app-shell flex flex-col min-h-[100dvh] w-full max-w-[480px] mx-auto bg-bloom-cream relative overflow-hidden shadow-2xl">
       <main className="flex-1 w-full overflow-y-auto overflow-x-hidden">
         {children}
       </main>
@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       */}
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 w-full max-w-[480px] h-[64px] pb-safe flex items-center justify-around px-2 backdrop-blur-[20px] bg-[rgba(255,248,240,0.85)] border-t border-[rgba(242,196,206,0.3)] z-40">
+      <nav className="app-bottom-nav fixed bottom-0 w-full max-w-[480px] flex items-start justify-around px-2 backdrop-blur-[20px] bg-[rgba(255,248,240,0.9)] border-t border-[rgba(242,196,206,0.3)] z-40" aria-label="Primary navigation">
         {navItems.map((item) => {
           const isActive = location === item.path;
           return (
@@ -56,15 +56,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Grid size={24} strokeWidth={2} className="text-bloom-text-soft" />
           <span className="text-[10px] font-lato text-bloom-text-soft">More</span>
         </button>
-      </div>
+      </nav>
 
       {/* More Drawer */}
       <Drawer.Root open={moreOpen} onOpenChange={setMoreOpen}>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 max-w-[480px] mx-auto" />
-          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90vh]">
+          <Drawer.Content className="bg-bloom-cream flex flex-col rounded-t-[28px] fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-50 max-h-[90dvh]">
             <div className="mx-auto w-10 h-1 flex-shrink-0 rounded-full bg-bloom-pink-deep/30 my-4" />
-            <div className="px-6 pb-12 pt-2">
+            <div className="drawer-safe px-6 pt-2">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-playfair italic text-2xl text-bloom-dark">More Places</h2>
                 {/* Tiny floral row accent */}
